@@ -81,6 +81,11 @@ namespace Releases_of_films
                                 writer.WriteLine(data); // записывает в файл данные
                                 textBoxIn.Text = "";
                             }
+                            else
+                            {
+                                textBoxIn.ForeColor = Color.Black;
+                                textBoxIn.Text = "Не соответствует формату!";
+                            }
                         }
                         else
                         {
@@ -167,19 +172,19 @@ namespace Releases_of_films
 
                             TimeSpan time = dateSet.Subtract(dateNow); // разница между датами
 
-                            char[] ar = ((Convert.ToString(time.Days + 1)).ToCharArray()); // проверка
+                            char[] ar = ((Convert.ToString(time.Days)).ToCharArray()); // проверка
                             Array.Reverse(ar);
                             string s = new String(ar);
                             byte shift = byte.Parse(s[0].ToString());
-                            if (shift == 1 && time.Days + 1 != 11) s = "день";
-                            else if (shift == 2 && time.Days + 1 != 12) s = "дня";
-                            else if (shift == 3 && time.Days + 1 != 13) s = "дня";
-                            else if (shift == 4 && time.Days + 1 != 14) s = "дня";
+                            if (shift == 1 && time.Days != 11) s = "день";
+                            else if (shift == 2 && time.Days != 12) s = "дня";
+                            else if (shift == 3 && time.Days != 13) s = "дня";
+                            else if (shift == 4 && time.Days != 14) s = "дня";
                             else s = "дней";
-                            textBoxOut.Text += $"  через {time.Days + 1} {s}.{Environment.NewLine}"; // вывод информации в textBox
+                            textBoxOut.Text += $"  через {time.Days} {s}.{Environment.NewLine}"; // вывод информации в textBox
 
                             // пытаться упорядочивать
-                            aid[i] = Convert.ToInt16(time.Days + 1); // заполнение массива aid
+                            aid[i] = Convert.ToInt16(time.Days); // заполнение массива aid
                         }
 
                         StreamWriter writer = new StreamWriter("Releases_of_films.txt", false, Encoding.Unicode); // писатель
@@ -202,7 +207,7 @@ namespace Releases_of_films
                             aid[f3] = null;
                         }
                         writer.Close(); // закрывает поток
-                                        // строки упорядочены
+                        // строки упорядочены
                     }
                     else { textBoxOut.Text = "Информация не найдена!"; }
                 }
