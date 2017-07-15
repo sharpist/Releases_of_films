@@ -25,6 +25,7 @@ namespace Releases_of_films
             textBoxOut.Size = new Size(this.Width - 350, 300);
             textBoxDel.Size = new Size(this.Width - 45, 24);
         }
+        protected short?[] aid { get; set; } // свойство
 
         private void exit_Click(object sender, EventArgs e) // выход из программы
         { Application.Exit(); }
@@ -68,7 +69,7 @@ namespace Releases_of_films
                             // форматирование перед записью
                             string[] strValues = text.Split('\t', '\n', '\r', '.', '-'); // извлекает конкретную строку из массива
                             string data = null;
-                            for (int t = 0; t < strValues.Length; t++)
+                            for (byte t = 0; t < strValues.Length; t++)
                             {
                                 data += $"{strValues[t].Trim(new Char[] { ' ', '*', '.' })}{(t < 2 ? '.' : ' ')}";
                                 if (t == 3) data = data.Insert(11, "- ");
@@ -109,17 +110,19 @@ namespace Releases_of_films
                     // создание массива union, согласование типов/формата данных
                     string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries); // заполнить массив разбитыми на табы строками
                     //double[] realValues = new double[lines.Length]; // хранилище результатов, не используется
-                    int[][] union = new int [lines.Length][]; // хранилище результатов
+                    short[][] union = new short [lines.Length][]; // хранилище результатов
 
                     if (textBoxOut.Text != String.Empty) // обновить textBox перед выводом информации
                     { textBoxOut.Text = ""; }
 
-                    for (int i = 0; i < lines.Length; i++)
+                    aid = new short?[lines.Length]; // создание массива aid
+
+                    for (byte i = 0; i < lines.Length; i++)
                     {
                         string[] strValues = lines[i].Split('\t', '\n', '\r', '.', '-'); // извлекает конкретную строку из массива
                         // форматирование строки
-                        string display = null;
-                        for (int t = 0; t < strValues.Length; t++)
+                        string display = null; // $"{i+1}). "; // нумерация строк
+                        for (byte t = 0; t < strValues.Length; t++)
                         {
                             display += $"{strValues[t].Trim(new Char[] { ' ', '*', '.' })}{(t < 2 ? '.' : ' ')}";
                             if (t == 2) display += " «";
@@ -130,20 +133,20 @@ namespace Releases_of_films
                         textBoxOut.Text += display; // вывод информации в textBox
 
                         //realValues[i] = double.Parse(strValues[j]); // извлекает конкретный символ из строки
-                        union[i] = new int[strValues.Length - 1];
-                        for (int j = 0; j < strValues.Length; j++)
+                        union[i] = new short[strValues.Length - 1];
+                        for (byte j = 0; j < strValues.Length; j++)
                             if (!(j == 3))
-                                union[i][j] = Convert.ToInt32(strValues[j]);
+                                union[i][j] = Convert.ToInt16(strValues[j]);
 
 
                         // вычислить даты
                         DateTime dateNow = new DateTime();
                         dateNow = DateTime.Now; // текущее время
 
-                        int y = 0, m = 0, d = 0;
+                        short y = 0, m = 0, d = 0;
                         for (; i < union.Length;) // установка даты, используется массив union
                         {
-                            for (int j = 0; j < union[i].Length; j++)
+                            for (byte j = 0; j < union[i].Length; j++)
                             {
                                 if (j == 0)
                                     d = union[i][j];
@@ -159,19 +162,42 @@ namespace Releases_of_films
 
                         TimeSpan time = dateSet.Subtract(dateNow); // разница между датами
 
-                        int intact = time.Days + 1; // проверка
-                        string s = intact.ToString();
-                        char[] ar = s.ToCharArray();
+                        char[] ar = ((Convert.ToString(time.Days + 1)).ToCharArray()); // проверка
                         Array.Reverse(ar);
-                        s = new String(ar);
-                        int shift = Convert.ToInt32(s[0].ToString());
-                        if (shift == 1 && intact != 11) s = "день";
-                        else if (shift == 2 && intact != 12) s = "дня";
-                        else if (shift == 3 && intact != 13) s = "дня";
-                        else if (shift == 4 && intact != 14) s = "дня";
+                        string s = new String(ar);
+                        byte shift = byte.Parse(s[0].ToString());
+                        if (shift == 1 && time.Days + 1 != 11) s = "день";
+                        else if (shift == 2 && time.Days + 1 != 12) s = "дня";
+                        else if (shift == 3 && time.Days + 1 != 13) s = "дня";
+                        else if (shift == 4 && time.Days + 1 != 14) s = "дня";
                         else s = "дней";
                         textBoxOut.Text += $"  через {time.Days + 1} {s}.{Environment.NewLine}"; // вывод информации в textBox
+
+                        // пытаться упорядочивать
+                        aid[i] = Convert.ToInt16(time.Days + 1); // заполнение массива aid
                     }
+
+                    StreamWriter writer = new StreamWriter("Releases_of_films.txt", false, Encoding.Unicode); // писатель
+                    for (byte i = 0; i < lines.Length; i++)
+                    {
+                        short? f1 = short.MaxValue; // флаг 1
+                        byte f3 = 0; // флаг 3
+
+                        for (byte j = 0; j < lines.Length; j++)
+                        {
+                            byte f2 = 0; // флаг 2
+                            if (aid[j] < f1)
+                            {
+                                f1 = aid[j];
+                                f2 = 1;
+                            }
+                            if(f2 == 1) f3 = j;
+                        }
+                        writer.WriteLine(lines[f3]);
+                        aid[f3] = null;
+                    }
+                    writer.Close(); // закрывает поток
+                    // строки упорядочены
                 }
                 else { textBoxOut.Text = "Информация не найдена!"; }
             }
@@ -187,7 +213,7 @@ namespace Releases_of_films
             {
                 if (System.IO.File.Exists("Releases_of_films.txt")) // проверка на существование файла
                 {
-                    int del = Convert.ToInt32(textBoxDel.Text)-1; // номер индекса строки, которую надо удалить
+                    byte del = Convert.ToByte(textBoxDel.Text); // номер индекса строки, которую надо удалить
 
                     FileStream file = new FileStream("Releases_of_films.txt", FileMode.Open, FileAccess.Read); // открывает поток
                     StreamReader reader = new StreamReader(file, Encoding.Unicode); // читатель
@@ -198,9 +224,9 @@ namespace Releases_of_films
                     string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries); // заполнить массив разбитыми на табы строками
                     StreamWriter writer = new StreamWriter("Releases_of_films.txt", false, Encoding.Unicode); // писатель
 
-                    for (int i = 0; i < lines.Length; i++)
+                    for (byte i = 0; i < lines.Length; i++)
                     {
-                        if (i == del)
+                        if (i == del - 1)
                             continue;
                         writer.WriteLine(lines[i]);
                     }
