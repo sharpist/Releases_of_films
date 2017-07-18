@@ -131,7 +131,7 @@ namespace Releases_of_films
                         {
                             string[] strValues = lines[i].Split('\t', '\n', '\r', '.', '-'); // извлекает конкретную строку из массива
                                                                                              // форматирование строки
-                            string display = null; // $"{i+1}). "; // нумерация строк
+                            string display = null;
                             for (byte t = 0; t < strValues.Length; t++)
                             {
                                 display += $"{strValues[t].Trim(new Char[] { ' ', '*', '.' })}{(t < 2 ? '.' : ' ')}";
@@ -233,19 +233,37 @@ namespace Releases_of_films
 
                     if (!String.IsNullOrWhiteSpace(text)) // проверка на пустоту файла
                     {
-                        byte del = Convert.ToByte(textBoxDel.Text); // номер индекса строки, которую надо удалить
-
-                        string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries); // заполнить массив разбитыми на табы строками
-                        StreamWriter writer = new StreamWriter("Releases_of_films.txt", false, Encoding.Unicode); // писатель
-
-                        for (byte i = 0; i < lines.Length; i++)
+                        bool check = false; // проверка входного значения
+                        string look = textBoxDel.Text;
+                        foreach (char ch in look)
                         {
-                            if (i == del - 1)
-                                continue;
-                            writer.WriteLine(lines[i]);
+                            if (Char.IsNumber(ch))
+                                check = true;
+                            else
+                                check = false;
                         }
-                        writer.Close(); // закрывает поток
-                        buttonOut_Click(null, null);
+                        if (check)
+                        {
+                            byte del = Convert.ToByte(textBoxDel.Text); // номер индекса строки, которую надо удалить
+
+                            string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries); // заполнить массив разбитыми на табы строками
+                            StreamWriter writer = new StreamWriter("Releases_of_films.txt", false, Encoding.Unicode); // писатель
+
+                            for (byte i = 0; i < lines.Length; i++)
+                            {
+                                if (i == del - 1)
+                                    continue;
+                                writer.WriteLine(lines[i]);
+                            }
+                            writer.Close(); // закрывает поток
+                            if (textBoxDel.Text != String.Empty) // обновить textBox
+                            { textBoxDel.Text = ""; }
+                            buttonOut_Click(null, null);
+                        }
+                        else
+                        {
+                            throw new Exception("Не соответствует формату!");
+                        }
                     }
                 }
             }
