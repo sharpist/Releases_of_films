@@ -119,7 +119,7 @@ namespace Releases_of_films
                     {
                         // создание массива union, согласование типов/формата данных
                         string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries); // заполнить массив разбитыми на табы строками
-                                                                                                                                  //double[] realValues = new double[lines.Length]; // хранилище результатов, не используется
+                        //double[] realValues = new double[lines.Length]; // хранилище результатов, не используется
                         short[][] union = new short [lines.Length][]; // хранилище результатов
 
                         if (textBoxOut.Text != String.Empty) // обновить textBox перед выводом информации
@@ -130,7 +130,7 @@ namespace Releases_of_films
                         for (byte i = 0; i < lines.Length; i++)
                         {
                             string[] strValues = lines[i].Split('\t', '\n', '\r', '.', '-'); // извлекает конкретную строку из массива
-                                                                                             // форматирование строки
+                            // форматирование строки
                             string display = null;
                             for (byte t = 0; t < strValues.Length; t++)
                             {
@@ -233,16 +233,16 @@ namespace Releases_of_films
 
                     if (!String.IsNullOrWhiteSpace(text)) // проверка на пустоту файла
                     {
-                        bool check = false; // проверка входного значения
+                        byte yes = 0, not = 0; // проверка входного значения
                         string look = textBoxDel.Text;
                         foreach (char ch in look)
                         {
                             if (Char.IsNumber(ch))
-                                check = true;
+                                yes = 1;
                             else
-                                check = false;
+                                not = 1;
                         }
-                        if (check)
+                        if (yes == 1 && not != 1)
                         {
                             byte del = Convert.ToByte(textBoxDel.Text); // номер индекса строки, которую надо удалить
 
