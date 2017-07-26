@@ -18,11 +18,12 @@ namespace Releases_of_films
         {
             InitializeComponent();
             // задать размеры для textBox
+            textBoxIn.TextAlign = HorizontalAlignment.Center;
             textBoxIn.ForeColor = Color.Gray;
-            textBoxDel.ForeColor = Color.Red;
             textBoxIn.Text = "дд.мм.гггг - название";
-            textBoxIn.Size = new Size(this.Width - 350, 35);
-            textBoxOut.Size = new Size(this.Width - 350, 300);
+            textBoxIn.Size = new Size(this.Width - 350, 40);
+            textBoxOut.Size = new Size(this.Width - 350, 310);
+            textBoxDel.ForeColor = Color.Red;
             textBoxDel.Size = new Size(this.Width - 45, 24);
         }
         protected short?[] aid { get; set; } // свойство
@@ -38,6 +39,7 @@ namespace Releases_of_films
 
         private void textBoxIn_MouseEnter(object sender, EventArgs e) // событие 1 курсор внутри
         {
+            textBoxIn.TextAlign = HorizontalAlignment.Left;
             textBoxIn.ForeColor = Color.Black;
             textBoxIn.Text = "";
             textBoxIn.MouseEnter -= textBoxIn_MouseEnter; // откл.
