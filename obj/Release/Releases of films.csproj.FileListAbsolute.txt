@@ -1,0 +1,17 @@
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases_of_films\bin\Release\Releases_of_films.exe.config
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases_of_films\bin\Release\Releases_of_films.exe
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases_of_films\bin\Release\Releases_of_films.pdb
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases_of_films\obj\Release\Releases_of_films.Form.resources
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases_of_films\obj\Release\Releases_of_films.Properties.Resources.resources
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases_of_films\obj\Release\Releases of films.csproj.GenerateResource.Cache
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases_of_films\obj\Release\Releases_of_films.exe
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases_of_films\obj\Release\Releases_of_films.pdb
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\bin\Release\Releases_of_films.exe.config
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\obj\Release\Releases_of_films.exe
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\obj\Release\Releases_of_films.pdb
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\bin\Release\Releases_of_films.exe
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\bin\Release\Releases_of_films.pdb
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\obj\Release\Releases of films.csprojResolveAssemblyReference.cache
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\obj\Release\Releases_of_films.Form.resources
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\obj\Release\Releases_of_films.Properties.Resources.resources
+C:\Users\Alexander\Documents\GitHub\Releases_of_films\Releases of films\obj\Release\Releases of films.csproj.GenerateResource.Cache

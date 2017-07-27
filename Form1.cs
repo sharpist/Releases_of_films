@@ -22,7 +22,7 @@ namespace Releases_of_films
             textBoxIn.ForeColor = Color.Gray;
             textBoxIn.Text = "дд.мм.гггг - название";
             textBoxIn.Size = new Size(this.Width - 350, 40);
-            textBoxOut.Size = new Size(this.Width - 350, 310);
+            textBoxOut.Size = new Size(this.Width - 350, 225);
             textBoxDel.ForeColor = Color.Red;
             textBoxDel.Size = new Size(this.Width - 45, 24);
         }
@@ -54,14 +54,13 @@ namespace Releases_of_films
         */
         private void buttonIn_Click(object sender, EventArgs e) // сохранить
         {
+            //if (!System.IO.File.Exists("Releases_of_films.txt")) { } // проверка на существование файла, не используется
+            string text = textBoxIn.Text; // записывает в переменную данные
+
+            FileStream file = new FileStream("Releases_of_films.txt", FileMode.Append, FileAccess.Write); // открывает поток
+            StreamWriter writer = new StreamWriter(file, Encoding.Unicode); // писатель
             try
             {
-                //if (!System.IO.File.Exists("Releases_of_films.txt")) { } // проверка на существование файла, не используется
-                string text = textBoxIn.Text; // записывает в переменную данные
-
-                FileStream file = new FileStream("Releases_of_films.txt", FileMode.Append, FileAccess.Write); // открывает поток
-                StreamWriter writer = new StreamWriter(file, Encoding.Unicode); // писатель
-
                 if (!String.IsNullOrWhiteSpace(text)) // проверка на пустоту файла
                 {
                     if (!(text == "дд.мм.гггг - название"))
@@ -96,13 +95,17 @@ namespace Releases_of_films
                         }
                     }
                 }
-                writer.Close(); // закрывает поток
-                buttonOut_Click(null, null);
             }
             catch (Exception ex)
             {
                 textBoxOut.Text = ex.Message;
             }
+            finally
+            {
+                if (writer != null)
+                    writer.Close(); // закрывает поток
+            }
+            buttonOut_Click(null, null);
         }
 
         private void buttonOut_Click(object sender, EventArgs e) // отобразить
@@ -115,8 +118,12 @@ namespace Releases_of_films
                     StreamReader reader = new StreamReader(file, Encoding.Unicode); // читатель
 
                     string text = reader.ReadToEnd(); // в строку text записывает файл данных
-                    reader.Close(); // закрывает поток
-
+                    try {/*****/}
+                    finally
+                    {
+                        if (reader != null)
+                            reader.Close(); // закрывает поток
+                    }
                     if (!String.IsNullOrWhiteSpace(text)) // проверка на пустоту файла
                     {
                         // создание массива union, согласование типов/формата данных
@@ -190,25 +197,32 @@ namespace Releases_of_films
                         }
 
                         StreamWriter writer = new StreamWriter("Releases_of_films.txt", false, Encoding.Unicode); // писатель
-                        for (byte i = 0; i < lines.Length; i++)
+                        try
                         {
-                            short? f1 = short.MaxValue; // флаг 1
-                            byte f3 = 0; // флаг 3
-
-                            for (byte j = 0; j < lines.Length; j++)
+                            for (byte i = 0; i < lines.Length; i++)
                             {
-                                byte f2 = 0; // флаг 2
-                                if (aid[j] < f1)
+                                short? f1 = short.MaxValue; // флаг 1
+                                byte f3 = 0; // флаг 3
+
+                                for (byte j = 0; j < lines.Length; j++)
                                 {
-                                    f1 = aid[j];
-                                    f2 = 1;
+                                    byte f2 = 0; // флаг 2
+                                    if (aid[j] < f1)
+                                    {
+                                        f1 = aid[j];
+                                        f2 = 1;
+                                    }
+                                    if (f2 == 1) f3 = j;
                                 }
-                                if (f2 == 1) f3 = j;
+                                writer.WriteLine(lines[f3]);
+                                aid[f3] = null;
                             }
-                            writer.WriteLine(lines[f3]);
-                            aid[f3] = null;
                         }
-                        writer.Close(); // закрывает поток
+                        finally
+                        {
+                            if (writer != null)
+                                writer.Close(); // закрывает поток
+                        }
                         // строки упорядочены
                     }
                     else { textBoxOut.Text = "Информация не найдена!"; }
@@ -231,8 +245,12 @@ namespace Releases_of_films
                     StreamReader reader = new StreamReader(file, Encoding.Unicode); // читатель
 
                     string text = reader.ReadToEnd(); // в строку text записывает файл данных
-                    reader.Close(); // закрывает поток
-
+                    try {/*****/}
+                    finally
+                    {
+                        if (reader != null)
+                            reader.Close(); // закрывает поток
+                    }
                     if (!String.IsNullOrWhiteSpace(text)) // проверка на пустоту файла
                     {
                         byte yes = 0, not = 0; // проверка входного значения
@@ -249,23 +267,28 @@ namespace Releases_of_films
                             byte del = Convert.ToByte(textBoxDel.Text); // номер индекса строки, которую надо удалить
 
                             string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries); // заполнить массив разбитыми на табы строками
-                            StreamWriter writer = new StreamWriter("Releases_of_films.txt", false, Encoding.Unicode); // писатель
 
-                            for (byte i = 0; i < lines.Length; i++)
+                            StreamWriter writer = new StreamWriter("Releases_of_films.txt", false, Encoding.Unicode); // писатель
+                            try
                             {
-                                if (i == del - 1)
-                                    continue;
-                                writer.WriteLine(lines[i]);
+                                for (byte i = 0; i < lines.Length; i++)
+                                {
+                                    if (i == del - 1)
+                                        continue;
+                                    writer.WriteLine(lines[i]);
+                                }
                             }
-                            writer.Close(); // закрывает поток
+                            finally
+                            {
+                                if (writer != null)
+                                    writer.Close(); // закрывает поток
+                            }
+
                             if (textBoxDel.Text != String.Empty) // обновить textBox
                             { textBoxDel.Text = ""; }
                             buttonOut_Click(null, null);
                         }
-                        else
-                        {
-                            throw new Exception("Не соответствует формату!");
-                        }
+                        else { throw new Exception("Не соответствует формату!"); }
                     }
                 }
             }
